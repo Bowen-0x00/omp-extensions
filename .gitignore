@@ -1,0 +1,21 @@
+# Node & build
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+# Logs & temporary files
+*.log
+*.tmp
+*.bak
+.DS_Store
+
+# Secrets & Environment variables
+.env*
+*.key
+token*
+
+# OMP session & research outputs
+research/
+*.jsonl
+*.csv
