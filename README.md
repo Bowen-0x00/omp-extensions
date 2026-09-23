@@ -15,8 +15,16 @@
   - **Model A（提案与实验者）**：查阅现有文献/代码，提出具体可证伪的假说（v1），根据批评调整方向，编写代码并在本地运行真实测试/仿真，收集原始数据。
   - **Model B（独立审查者 / 怀疑论者）**：通过内置的 `idea-reviewer` 独立子 Agent 运行，专门挑刺、质疑逻辑缺陷与同质化、发出实验质询，并亲自核查原始日志与数据。
 - **闭环迭代路径**：
-  $$\text{A 构思假说 (v1)} \xrightarrow{\text{送审}} \text{B 挑刺/否定 (REVISE/REJECT)} \xrightarrow{\text{调整}} \text{A 换方向 (v2)}$$
-  $$\xrightarrow{\text{质询}} \text{B 要求实测 (NEED\_EXPERIMENT)} \xrightarrow{\text{运行实验}} \text{A 提交实测数据} \xrightarrow{\text{核验}} \text{B 认可 (ACCEPT)} \xrightarrow{} \text{沉淀可靠成果}$$
+
+  ```mermaid
+  flowchart TD
+      A1["A 构思假说 (v1)"] -->|"送审 (task)"| B1["B 挑刺/否定 (REVISE / REJECT)"]
+      B1 -->|"反馈质疑"| A2["A 调整机制 / 换方向 (v2)"]
+      A2 -->|"重新送审 (hub send)"| B2["B 提出实测质询 (NEED_EXPERIMENT)"]
+      B2 -->|"要求最小对照实验"| A3["A 运行真实实验与基准测试<br/>(保存原始日志至 research/)"]
+      A3 -->|"提交实测数据与日志"| B3["B 亲自核验原始证据"]
+      B3 -->|"核验通过 (ACCEPT)"| C["输出经受住推敲的最终可靠成果"]
+  ```
 - **特性**：
   - **自由模型配对**：支持通过 `-a` 和 `-b` 自由指定任意模型组合（如 `-a gemini-3.8-flash -b gpt-6`），彻底解耦硬编码。
   - **底层动态覆盖**：基于 OMP 生命周期钩子 `before_subagent_spawn`，无需修改任何系统配置即可无缝覆盖审查模型的实例。

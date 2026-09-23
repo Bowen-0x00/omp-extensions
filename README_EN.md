@@ -15,8 +15,16 @@ A closed-loop research and review system tailored for scientific exploration, ar
   - **Model A (Proposer & Experimenter)**: Researches prior art, formulates concrete, falsifiable hypotheses (v1), adapts to critiques, writes code, executes local benchmarks/simulations, and reports raw observations.
   - **Model B (Independent Critic / Skeptic)**: Runs as an isolated subagent (`idea-reviewer`), rigorously auditing assumptions, flagging unnovel ideas, demanding empirical verification, and checking raw logs and metrics.
 - **Closed-Loop Scientific Trajectory**:
-  $$\text{A forms hypothesis (v1)} \xrightarrow{\text{submit}} \text{B critiques (REVISE/REJECT)} \xrightarrow{\text{pivot}} \text{A refines (v2)}$$
-  $$\xrightarrow{\text{challenge}} \text{B demands test (NEED\_EXPERIMENT)} \xrightarrow{\text{run tools}} \text{A submits raw logs} \xrightarrow{\text{verify}} \text{B accepts (ACCEPT)} \xrightarrow{} \text{Final validated report}$$
+
+  ```mermaid
+  flowchart TD
+      A1["A forms hypothesis (v1)"] -->|"Submit (task)"| B1["B critiques (REVISE / REJECT)"]
+      B1 -->|"Feedback & pushback"| A2["A refines mechanism / pivots (v2)"]
+      A2 -->|"Resubmit (hub send)"| B2["B challenges validity (NEED_EXPERIMENT)"]
+      B2 -->|"Mandates baseline & metrics"| A3["A executes real tests & benchmarks<br/>(logs saved to research/)"]
+      A3 -->|"Submits empirical data"| B3["B audits raw logs & metrics"]
+      B3 -->|"Verification passed (ACCEPT)"| C["Consolidates into final reliable report"]
+  ```
 - **Key Highlights**:
   - **Decoupled Model Pairing**: Freely select any model combination via `-a` and `-b` (e.g. `-a gemini-3.8-flash -b gpt-6`).
   - **Dynamic Hook-Based Model Override**: Leverages OMP's `before_subagent_spawn` lifecycle hook to dynamically override the reviewer model on the fly without modifying global configs.
